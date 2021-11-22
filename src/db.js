@@ -4,8 +4,11 @@ require("dotenv").config();
 const username = dbConfig.dbusername;
 const password = dbConfig.dbpassword;
 const option = dbConfig.dbOption;
+const dbHelper = require("./dbHelper.js");
 
 let db = mongoose.Connection;
+let Schema = mongoose.Schema;
+ObjectID = Schema.ObjectID;
 
 const connect = () => {
     let uri = "";
@@ -30,5 +33,11 @@ const disconnect = () => {
     mongoose.disconnect();
 };
 
-module.exports.connect = connect;
-module.exports.disconnect = disconnect;
+module.exports = {
+    db: db,
+    connect: connect,
+    disconnect: disconnect,
+    Schema: Schema,
+    ObjectID: ObjectID,
+    dbHelper: dbHelper,
+};
