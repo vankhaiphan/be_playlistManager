@@ -1,6 +1,8 @@
 const { db, connection, Schema, ObjectID, dbHelper } = require("../src/db");
-const dataTables = require("mongoose-datatables");
-
+// const dataTables = require("mongoose-datatable");
+const bcrypt = require("bcrypt");
+const saltRounds = 10; // The higher the number, the longer it takes
+const collection_name = "user";
 const schema = new Schema({
     _id: String,
     email: String,
@@ -8,14 +10,22 @@ const schema = new Schema({
     date_add: Date,
     activated: Boolean,
 });
-
-schema.plugin(dataTables);
+// schema.plugin(dataTables);
 const model = db.model(collection_name, schema, `${collection_name}s`);
 
 module.exports = {
     getById: async function(req) {
         let { _id } = req;
-        let query = model.findById({ _id });
+        console.log("ncs", _id);
+        let query = model.findById(_id);
+        let result = await query.exec();
+        console.log("result", result);
+        return result;
+    },
+
+    getByEmail: async function(req) {
+        let { email } = req;
+        let query = model.findOne({ email });
         let result = await query.exec();
         return result;
     },
@@ -23,15 +33,12 @@ module.exports = {
     save: async function(req) {
         let { email, password } = req;
         let _id = dbHelper.generateIdTechnique();
-
-        bcrypt.hash(password, saltRounds, function(err, hash) {
-            // Store hash in your password DB.
-        });
+        let hashed = bcrypt.hashSync(password, saltRounds);
 
         let document = new model({
             _id: _id,
             email: email,
-            password: password,
+            password: hashed,
             date_add: new Date(),
             activated: true,
         });

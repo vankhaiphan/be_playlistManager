@@ -1,4 +1,5 @@
 const dao = require("../models/user.dao");
+const bcrypt = require("bcrypt");
 
 module.exports = {
     getById: async function(req) {
@@ -6,12 +7,12 @@ module.exports = {
         let errorSet = [];
         let result = {};
 
-        let { _id: _id } = req;
+        let { _id } = req;
         let user = await dao.getById({ _id });
         if (!user) {
             return {
                 success: false,
-                errorSet: ["USER_NOTFOUND"],
+                errorSet: ["USER_NOT_FOUND"],
             };
         }
         result = {
@@ -85,5 +86,28 @@ module.exports = {
             data: user,
         };
         return result;
+    },
+
+    authenticate: async function(req, res) {
+        const { email, password } = req;
+
+        let findEmail = await dao.getByEmail(email);
+        if (!findEmail) {
+            return {
+                success: false,
+                errorSet: ["EMAIL_NOT_FOUND"],
+            };
+        }
+
+        if (!bcrypt.compareSync(password, findEmail.password)) {
+            return {
+                success: false,
+                errorSet: ["AUTHENTICATION_FAILED"],
+            };
+        }
+        return {
+            success: true,
+            errorSet: [],
+        };
     },
 };
