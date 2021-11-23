@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const bo = require("../controllers/user.bo");
+const bo = require("./user.bo");
 
 router.post("/getById", async function(req, res) {
     const request = {

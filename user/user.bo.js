@@ -1,4 +1,4 @@
-const dao = require("../models/user.dao");
+const dao = require("./user.dao");
 const bcrypt = require("bcrypt");
 
 module.exports = {

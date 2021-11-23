@@ -1,7 +1,7 @@
 const express = require("express");
-const { connect: dbconnect } = require("./db");
-const { apiPort } = require("./config");
-const routes = require("../src/routes");
+const { connect: dbconnect } = require("./src/db");
+const { apiPort } = require("./src/config");
+const routes = require("./src/routes");
 const bodyParser = require("body-parser");
 // Connect to the database
 dbconnect();
