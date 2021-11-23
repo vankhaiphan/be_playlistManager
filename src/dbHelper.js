@@ -2,7 +2,7 @@ const dbConfig = require("./config");
 require("dotenv").config();
 const username = dbConfig.dbusername;
 const password = dbConfig.dbpassword;
-const uuidv4 = require("../node_modules/uuidv4");
+const { uuid } = require("uuidv4");
 const randomstring = require("../node_modules/randomstring");
 
 module.exports = {
@@ -15,6 +15,6 @@ module.exports = {
 
     generateIdTechnique: function() {
         // id technique is a uuidv4
-        return uuidv4();
+        return uuid();
     },
 };

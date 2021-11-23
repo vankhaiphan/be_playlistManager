@@ -16,7 +16,6 @@ const model = db.model(collection_name, schema, `${collection_name}s`);
 module.exports = {
     getById: async function(req) {
         let { _id } = req;
-        console.log("ncs", _id);
         let query = model.findById(_id);
         let result = await query.exec();
         console.log("result", result);
@@ -31,9 +30,11 @@ module.exports = {
     },
 
     save: async function(req) {
+        console.log("req", req);
         let { email, password } = req;
         let _id = dbHelper.generateIdTechnique();
-        let hashed = bcrypt.hashSync(password, saltRounds);
+        const salt = bcrypt.genSaltSync(saltRounds);
+        let hashed = bcrypt.hashSync(password, salt);
 
         let document = new model({
             _id: _id,

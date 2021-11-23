@@ -24,15 +24,35 @@ module.exports = {
         return result;
     },
 
+    getByEmail: async function(req) {
+        let success = true;
+        let errorSet = [];
+        let result = {};
+
+        let { email } = req;
+        let user = await dao.getByEmail({ email });
+        if (!user) {
+            return {
+                success: false,
+                errorSet: ["USER_NOT_FOUND"],
+            };
+        }
+        result = {
+            status: 200,
+            success: success,
+            errorSet: errorSet,
+            data: user,
+        };
+        return result;
+    },
+
     // TO REVIEW
     create: async function(req) {
         let success = true;
         let errorSet = [];
         let result = {};
 
-        let { email, password } = req.body;
-
-        let user = await dao.save(email, password);
+        let user = await dao.save(req);
         result = {
             status: 200,
             success: success,
@@ -77,8 +97,14 @@ module.exports = {
         let errorSet = [];
         let result = {};
 
+        console.log("id", req);
         let user = await dao.delete(req);
-
+        if (!user) {
+            return {
+                success: false,
+                errorSet: ["ID_NOT_FOUND"],
+            };
+        }
         result = {
             status: 200,
             success: success,
@@ -91,15 +117,15 @@ module.exports = {
     authenticate: async function(req, res) {
         const { email, password } = req;
 
-        let findEmail = await dao.getByEmail(email);
+        let findEmail = await dao.getByEmail({ email });
         if (!findEmail) {
             return {
                 success: false,
                 errorSet: ["EMAIL_NOT_FOUND"],
             };
         }
-
-        if (!bcrypt.compareSync(password, findEmail.password)) {
+        let result = bcrypt.compareSync(password, findEmail.password);
+        if (!result) {
             return {
                 success: false,
                 errorSet: ["AUTHENTICATION_FAILED"],
@@ -108,6 +134,7 @@ module.exports = {
         return {
             success: true,
             errorSet: [],
+            data: result,
         };
     },
 };
