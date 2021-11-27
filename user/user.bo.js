@@ -97,7 +97,6 @@ module.exports = {
         let errorSet = [];
         let result = {};
 
-        console.log("id", req);
         let user = await dao.delete(req);
         if (!user) {
             return {
@@ -129,6 +128,7 @@ module.exports = {
             return {
                 success: false,
                 errorSet: ["AUTHENTICATION_FAILED"],
+                data: result,
             };
         }
         return {

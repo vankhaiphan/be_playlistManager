@@ -18,7 +18,6 @@ module.exports = {
         let { _id } = req;
         let query = model.findById(_id);
         let result = await query.exec();
-        console.log("result", result);
         return result;
     },
 
@@ -30,7 +29,6 @@ module.exports = {
     },
 
     save: async function(req) {
-        console.log("req", req);
         let { email, password } = req;
         let _id = dbHelper.generateIdTechnique();
         const salt = bcrypt.genSaltSync(saltRounds);
