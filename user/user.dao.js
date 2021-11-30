@@ -1,10 +1,12 @@
 const { db, connection, Schema, ObjectID, dbHelper } = require("../src/db");
 // const dataTables = require("mongoose-datatable");
 const bcrypt = require("bcrypt");
+const { ROLE_STATUS } = require("../common");
 const saltRounds = 10; // The higher the number, the longer it takes
 const collection_name = "user";
 const schema = new Schema({
     _id: String,
+    id_creator: String,
     email: String,
     password: String,
     date_add: Date,
@@ -29,13 +31,18 @@ module.exports = {
     },
 
     save: async function(req) {
-        let { email, password } = req;
+        let { email, password, ads } = req;
         let _id = dbHelper.generateIdTechnique();
         const salt = bcrypt.genSaltSync(saltRounds);
         let hashed = bcrypt.hashSync(password, salt);
 
+        let roleSubs = ROLE_STATUS.USER_ROLE;
+        if (ads) {
+            roleSubs = ROLE_STATUS.ADVERTISER_ROLE;
+        }
         let document = new model({
             _id: _id,
+            id_creator: roleSubs,
             email: email,
             password: hashed,
             date_add: new Date(),

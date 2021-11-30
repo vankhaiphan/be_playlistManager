@@ -31,6 +31,7 @@ router.post("/createAccount", async function(req, res) {
     const request = {
         email: req.body.email,
         password: req.body.password,
+        ads: req.body.ads,
     };
     const result = await bo.create(request);
     res.send(result);
