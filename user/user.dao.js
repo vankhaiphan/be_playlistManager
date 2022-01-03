@@ -1,5 +1,4 @@
 const { db, connection, Schema, ObjectID, dbHelper } = require("../src/db");
-// const dataTables = require("mongoose-datatable");
 const bcrypt = require("bcrypt");
 const { ROLE_STATUS } = require("../common");
 const saltRounds = 10; // The higher the number, the longer it takes
@@ -33,10 +32,15 @@ module.exports = {
     save: async function(req) {
         let { email, password, ads } = req;
         let _id = dbHelper.generateIdTechnique();
+
+        // Crypting the password
         const salt = bcrypt.genSaltSync(saltRounds);
         let hashed = bcrypt.hashSync(password, salt);
 
+        // Assign default role
         let roleSubs = ROLE_STATUS.USER_ROLE;
+
+        // Assign advertiser role if required
         if (ads) {
             roleSubs = ROLE_STATUS.ADVERTISER_ROLE;
         }

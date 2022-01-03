@@ -2,8 +2,15 @@
 // at {{ https://cloud.google.com/console }}.
 // If you run this code from a server other than http://localhost,
 // you need to register your own client ID.
-var OAUTH2_CLIENT_ID = "1069099455011-c3bkpf6ei0da1u490e0d1lhtc6vitstu.apps.googleusercontent.com";
-var OAUTH2_SCOPES = ["https://www.googleapis.com/auth/youtube"];
+let OAUTH2_CLIENT_ID = "1069099455011-c3bkpf6ei0da1u490e0d1lhtc6vitstu.apps.googleusercontent.com";
+let OAUTH2_SCOPES = ["https://www.googleapis.com/auth/youtube"];
+
+const THIRD_PARTY_URL = {
+    AUTH_TOKEN: "https://accounts.google.com/o/oauth2/v2/auth",
+    SEARCH_VIDEOS_TOKEN: "https://youtube.googleapis.com/youtube/v3/search",
+    PLAYLIST_TOKEN: "https://youtube.googleapis.com/youtube/v3/playlists",
+    VIDEOS_TOKEN: "ttps://youtube.googleapis.com/youtube/v3/videos",
+};
 
 // Upon loading, the Google APIs JS client automatically invokes this callback.
 googleApiClientReady = function() {
