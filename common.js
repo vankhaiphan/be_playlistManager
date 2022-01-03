@@ -5,6 +5,11 @@ const ROLE_STATUS = {
     USER_ROLE: "71295194-4a31-4e30-b843-ca152a1bae83",
 };
 
+// const PLAYLIST_STATUS = {
+//     PUBLIC: "public",
+//     ""
+//     PRIVATE: "private",
+// }
 module.exports = {
     ROLE_STATUS,
 };

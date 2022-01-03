@@ -24,7 +24,7 @@ module.exports = {
         return result;
     },
 
-    add: async function(req) {
+    create: async function(req) {
         let success = true;
         let errorSet = [];
         let result = {};
