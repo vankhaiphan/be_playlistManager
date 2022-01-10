@@ -13,6 +13,8 @@ const app = express();
 // app.use(cookieParser());
 app.use(bodyParser.json({ limit: "5mb" }));
 // app.get("/", (req, res) => res.send("Hello World"));
+const cors = require ('cors');
+app.use(cors({origin: 'http://localhost:4200', credentials: true}));
 
 app.use("/", routes);
 
