@@ -53,11 +53,16 @@ router.post("/deleteAccount", async function(req, res) {
     res.send(result);
 });
 
-// router.post("/changeRole", async function(req,res){
-//     const request = {
-//         _id: req.body._id,
+router.post("/changeRole", async function(req, res) {
+    const request = {
+        _id: req.body._id,
+    };
+    const result = await bo.changeRole(request);
+    res.send(result);
+});
 
-//     }
-// })
+//router.post("/", async function(req,res){
+
+//});
 
 module.exports = router;

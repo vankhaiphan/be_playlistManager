@@ -9,6 +9,7 @@ const schema = new Schema({
     description: String,
     status: String,
     user_id: String,
+    thumbnail: String,
     date_add: Date,
 });
 // schema.plugin(dataTables);
@@ -25,6 +26,9 @@ module.exports = {
     save: async function(req) {
         let { name, description, status, id_user } = req;
 
+        // TO REVIEW
+        let thumbnail = "";
+
         let _id = dbHelper.generateIdTechnique();
         if (status === "PUBLIC") {
             status = common.PLAYLIST_STATUS.PUBLIC;
@@ -39,6 +43,7 @@ module.exports = {
             _id: _id,
             name: name,
             description: description,
+            thumbnail: thumbnail,
             status: status,
             id_user: id_user,
             date_add: new Date(),

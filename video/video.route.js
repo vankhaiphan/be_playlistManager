@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const bo = require("./video.bo");
+const dotenv = require("dotenv");
+dotenv.config();
 
 router.post("/getByPlaylistId", async function(req, res) {
     const request = {
@@ -36,4 +38,15 @@ router.post("/modifyVideo", async function(req, res) {
 //     res.send(result);
 // });
 
+// router.post("/search", async function(req, res) {
+//     try {
+//         const searchRequest = {
+//             key: process.env.YOUTUBE_API_KEY,
+//         };
+//         const searchResponse = await bo.search(searchRequest);
+//         res.send(searchResponse);
+//     } catch (error) {
+//         next(error);
+//     }
+// });
 module.exports = router;

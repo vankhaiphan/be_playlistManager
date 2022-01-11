@@ -113,6 +113,7 @@ module.exports = {
         return result;
     },
 
+    // renvoie id_creator
     authenticate: async function(req, res) {
         const { email, password } = req;
 
@@ -123,18 +124,19 @@ module.exports = {
                 errorSet: ["EMAIL_NOT_FOUND"],
             };
         }
-        let result = bcrypt.compareSync(password, findEmail.password);
-        if (!result) {
+        let secure = bcrypt.compareSync(password, findEmail.password);
+        if (!secure) {
             return {
                 success: false,
                 errorSet: ["AUTHENTICATION_FAILED"],
-                data: result,
+                data: secure,
             };
         }
+
         return {
             success: true,
             errorSet: [],
-            data: result,
+            data: findEmail,
         };
     },
 };
