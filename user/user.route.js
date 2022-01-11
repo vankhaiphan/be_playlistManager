@@ -2,6 +2,10 @@ const express = require("express");
 const router = express.Router();
 const bo = require("./user.bo");
 
+router.post("/getAll", async function(req, res) {
+    const result = await bo.getAll();
+    res.send(result);
+});
 router.post("/getById", async function(req, res) {
     const request = {
         _id: req.body._id,

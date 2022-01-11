@@ -2,6 +2,21 @@ const dao = require("./user.dao");
 const bcrypt = require("bcrypt");
 
 module.exports = {
+    getAll: async function(req) {
+        let success = true;
+        let errorSet = [];
+        let result = {};
+
+        let users = await dao.getAll();
+        result = {
+            status: 200,
+            success: success,
+            errorSet: errorSet,
+            data: users,
+        };
+        return result;
+    },
+
     getById: async function(req) {
         let success = true;
         let errorSet = [];
