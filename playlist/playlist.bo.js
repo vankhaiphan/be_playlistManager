@@ -24,6 +24,29 @@ module.exports = {
         return result;
     },
 
+    getById: async function(req) {
+        let success = true;
+        let errorSet = [];
+        let result = {};
+
+        let [_id] = req;
+        let playlist = await dao.getById({ _id });
+        if (!playlist) {
+            return {
+                success: false,
+                errorSet: ["PLAYLIST_NOT_FOUND"],
+            };
+        }
+
+        result = {
+            status: 200,
+            success: success,
+            errorSet: errorSet,
+            data: playlist,
+        };
+        return result;
+    },
+
     create: async function(req) {
         let success = true;
         let errorSet = [];
@@ -90,5 +113,27 @@ module.exports = {
         return result;
     },
 
-    getVideos: async function(req) {},
+    getVideos: async function(req) {
+        let { _id } = req;
+        let result = await dao.getVideos(_id);
+        if (!result) {
+            return {
+                success: false,
+                errorSet: result.errorSet,
+            };
+        }
+        return result;
+    },
+
+    addVideo: async function(req) {
+        let { _id, video } = req;
+        let result = await dao.addVideo({ _id, video });
+        if (!result) {
+            return {
+                success: false,
+                errorSet: result.errorSet,
+            };
+        }
+        return result;
+    },
 };

@@ -2,10 +2,11 @@ const express = require("express");
 const router = express.Router();
 const bo = require("./user.bo");
 
-router.post("/getAll", async function(req, res) {
-    const result = await bo.getAll();
+router.post("/getSet", async function(req, res) {
+    const result = await bo.getSet();
     res.send(result);
 });
+
 router.post("/getById", async function(req, res) {
     const request = {
         _id: req.body._id,
@@ -44,6 +45,15 @@ router.post("/createAccount", async function(req, res) {
 router.post("/modifyAccount", async function(req, res) {
     const request = {
         _id: req.body._id,
+    };
+    const result = await bo.modify(request);
+    res.send(result);
+});
+
+router.post("/modifyPassword", async function(req, res) {
+    const request = {
+        _id: req.body._id,
+        password: req.body.password,
     };
     const result = await bo.modify(request);
     res.send(result);
