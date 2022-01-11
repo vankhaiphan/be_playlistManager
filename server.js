@@ -14,6 +14,9 @@ const app = express();
 app.use(bodyParser.json({ limit: "5mb" }));
 // app.get("/", (req, res) => res.send("Hello World"));
 
+const cors = require ('cors');
+app.use(cors({origin: 'http://127.0.0.1:4200', credentials: true}));
+
 app.use("/", routes);
 
 // const testdb = require('./Recup_all_users');
