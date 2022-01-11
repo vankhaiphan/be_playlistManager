@@ -15,6 +15,12 @@ const schema = new Schema({
 const model = db.model(collection_name, schema, `${collection_name}s`);
 
 module.exports = {
+    getAll: async function(req) {
+        let query = model.find();
+        let result = await query.exec();
+        return result;
+    },
+
     getById: async function(req) {
         let { _id } = req;
         let query = model.findById(_id);
