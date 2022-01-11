@@ -136,4 +136,16 @@ module.exports = {
         }
         return result;
     },
+
+    updateThumbnail: async function(req) {
+        let { _id } = req;
+        let result = dao.updateThumbnail({ _id });
+        if (!result) {
+            return {
+                success: false,
+                errorSet: ["ERROR_UPDATE_THUMBNAIL"],
+            };
+        }
+        return result;
+    },
 };
