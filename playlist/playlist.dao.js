@@ -1,6 +1,6 @@
 const { db, connection, Schema, ObjectID, dbHelper } = require("../src/db");
 const collection_name = "playlist";
-const videoDao = require("../video/video.bo");
+const videoDao = require("../video/video.dao");
 const common = require("../common");
 const schema = new Schema({
     _id: String,
@@ -103,6 +103,12 @@ module.exports = {
 
     updateThumbnail: async function(req) {
         let { _id } = req;
+
+        let playlist = await this.getById({ _id });
+        let video = playlist.data.videos[0];
+
+        let currentVideo = await videoDao.getById({ _id: video });
+        let thumbnail = currentVideo.data.thumbnail;
 
         let result = await this.modify({ _id, thumbnail });
         return result;

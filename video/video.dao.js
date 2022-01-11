@@ -32,6 +32,7 @@ module.exports = {
 
         for (let i = 0; i < playlists.length; i = i + 1) {
             let query = model.findOneAndUpdate({ _id: _id }, { $push: { playlists: playlists[i] } });
+
             let result = await query.exec();
             if (!result) {
                 return {
@@ -39,7 +40,9 @@ module.exports = {
                     errorSet: ["CANNOT_UPDATE"],
                 };
             }
+            await playlist_bo.updateThumbnail({ _id: playlists[i] });
         }
+
         result = {
             success: success,
             errorSet: errorSet,

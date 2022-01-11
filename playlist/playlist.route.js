@@ -53,4 +53,12 @@ router.post("/getVideos", async function(req, res) {
     res.send(result);
 });
 
+router.post("/updateThumbnail", async function(req, res) {
+    const request = {
+        _id: req.body._id,
+    };
+    const result = await bo.updateThumbnail(request);
+    res.send(result);
+});
+
 module.exports = router;
