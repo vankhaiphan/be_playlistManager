@@ -148,4 +148,28 @@ module.exports = {
         }
         return result;
     },
+
+    countByIdUser: async function(req) {
+        //Check input
+        if (!req.id_user) {
+            return {
+                success: false,
+                errorSet: ["INVALID_PARAMS"],
+            };
+        }
+
+        // Create count request
+        const request = {
+            id_user: req.id_user,
+        };
+        const count = await dao.countByIdUser(request);
+
+        return {
+            success: true,
+            errorSet: [],
+            data: {
+                count: count,
+            },
+        };
+    },
 };

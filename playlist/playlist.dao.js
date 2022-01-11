@@ -8,7 +8,7 @@ const schema = new Schema({
     name: String,
     description: String,
     status: String,
-    user_id: String,
+    id_user: String,
     thumbnail: String,
     date_add: Date,
     videos: [String],
@@ -111,6 +111,12 @@ module.exports = {
         let thumbnail = currentVideo.data.thumbnail;
 
         let result = await this.modify({ _id, thumbnail });
+        return result;
+    },
+
+    countByIdUser: async function(req) {
+        let query = model.countDocuments(req);
+        let result = await query.exec();
         return result;
     },
 };

@@ -24,6 +24,11 @@ module.exports = {
     },
 
     // search: async function(req) {},
+    countByCustomCondition: async function(req) {
+        let query = model.count(req);
+        let result = await query.exec();
+        return result;
+    },
 
     addToPlaylist: async function(req) {
         let { _id, playlists } = req;
