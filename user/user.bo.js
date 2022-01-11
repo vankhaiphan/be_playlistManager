@@ -1,13 +1,58 @@
 const dao = require("./user.dao");
 const bcrypt = require("bcrypt");
+const playlist_bo = require("../playlist/playlist.bo");
 
 module.exports = {
-    getAll: async function(req) {
+    getSet: async function(req) {
         let success = true;
         let errorSet = [];
         let result = {};
 
-        let users = await dao.getAll();
+        let userSet = [];
+
+        //Params in request
+        let { nbByPage, start, orderBy, orderASC } = req.body;
+        // Treat params
+        // Setup default pagination params
+        if (!start) start = 0;
+        if (!nbByPage) nbByPage = 20;
+
+        // Treat sort params
+        // By default sort by last created date
+        let _orderASC = orderASC ? "1" : "-1";
+        let _orderBy = orderBy || "date_add";
+        let sort = {};
+        sort[_orderBy] = _orderASC;
+
+        // Treat find params
+        // user get only their project
+        let find = {};
+        if (id_user) {
+            find["id_user"] = id_user;
+        }
+
+        // if search params is specify, filter project by title
+        let search_obj;
+
+        if (typeof search !== "undefined") {
+            search_obj = {
+                value: search,
+                fields: ["title"],
+            };
+        }
+
+        // Params for dao
+        let params = {
+            search,
+            start,
+            nbByPage,
+            sort: sort,
+            find: find,
+        };
+        let table = await dao.getSet(params);
+
+        let users = await dao.getSet();
+        let playlist = await playlist_bo.getByUserId();
         result = {
             status: 200,
             success: success,
@@ -128,7 +173,6 @@ module.exports = {
         return result;
     },
 
-    // renvoie id_creator
     authenticate: async function(req, res) {
         const { email, password } = req;
 

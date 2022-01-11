@@ -4,23 +4,29 @@ const bo = require("./video.bo");
 const dotenv = require("dotenv");
 dotenv.config();
 
-router.post("/getByPlaylistId", async function(req, res) {
+router.post("/getAllByPlaylistId", async function(req, res) {
     const request = {
         id_playlist: req.body.id_playlist,
     };
-    const result = await bo.getByPlaylistId(request);
+    const result = await bo.getAllByPlaylistId(request);
     res.send(result);
 });
 
-// router.post("/createVideo", async function(req, res) {
-//     const request = {
-//         name: req.body.name,
-//         password: req.body.password,
-//         ads: req.body.ads,
-//     };
-//     const result = await bo.create(request);
-//     res.send(result);
-// });
+router.post("/saveVideo", async function(req, res) {
+    const request = {
+        videoUrl: req.body.videoUrl,
+        title: req.body.title,
+        channelId: req.body.channelId,
+        channelUrl: req.body.channelUrl,
+        channelTitle: req.body.channelTitle,
+        description: req.body.description,
+        publishedAt: req.body.publishedAt,
+        thumbnails: req.body.thumbnails,
+        playlists: req.body.playlists,
+    };
+    const result = await bo.save(request);
+    res.send(result);
+});
 
 router.post("/modifyVideo", async function(req, res) {
     const request = {

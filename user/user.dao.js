@@ -11,11 +11,11 @@ const schema = new Schema({
     date_add: Date,
     activated: Boolean,
 });
-// schema.plugin(dataTables);
+
 const model = db.model(collection_name, schema, `${collection_name}s`);
 
 module.exports = {
-    getAll: async function(req) {
+    getSet: async function(req) {
         let query = model.find();
         let result = await query.exec();
         return result;
@@ -79,6 +79,32 @@ module.exports = {
         const query = model.findOneAndUpdate(find, mod, { new: true });
         const result = await query.exec();
         return result;
+    },
+
+    modifyPassword: async function(req) {
+        let { _id, password, newPassword } = req;
+        let user = this.getById({ _id });
+        let hash = user.data.password;
+        let decrypt = bcrypt.compareSync(password, hash);
+        if (!decrypt) {
+            return {
+                success: false,
+                errorSet: ["WRONG_PASSWORD"],
+            };
+        }
+
+        // Crypting the password
+        const salt = bcrypt.genSaltSync(saltRounds);
+        let hashed = bcrypt.hashSync(newPassword, salt);
+
+        let modifyPass = await this.modify();
+
+        let changed = {
+            success: true,
+            data: result,
+        };
+
+        return changed;
     },
 
     delete: async function(req) {
