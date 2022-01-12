@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const bo = require("./advertiser.bo");
+const bo = require("./history.bo");
 
 router.post("/createLog", async function(req, res) {
     const request = {
@@ -20,7 +20,7 @@ router.post("/getByUserId", async function(req, res) {
 });
 
 router.post("/getAllLog", async function(req, res) {
-    const result = await bo.getAllLog();
+    const result = await bo.getAll();
     res.send(result);
 });
 
@@ -31,3 +31,5 @@ router.post("/getById", async function(req, res) {
     const result = await bo.getById(request);
     res.send(result);
 });
+
+module.exports = router;

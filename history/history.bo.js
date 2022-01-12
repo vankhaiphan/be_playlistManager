@@ -73,8 +73,8 @@ module.exports = {
         let errorSet = [];
         let result = {};
 
-        let { id_video } = req;
-        let res = await dao.create({ _id });
+        let { id_video, id_user } = req;
+        let res = await dao.create({ id_video, id_user });
         if (!res) {
             return {
                 success: false,
