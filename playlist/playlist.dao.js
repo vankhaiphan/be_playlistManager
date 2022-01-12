@@ -62,7 +62,7 @@ module.exports = {
 
     modify: async function(req) {
         let { find, upd } = req;
-        console.log(upd);
+
         let mod = {
             $set: {
                 ...upd.$set,
