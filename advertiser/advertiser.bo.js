@@ -1,6 +1,65 @@
 const dao = require("./advertiser.dao");
 
 module.exports = {
+    getSet: async function(req) {
+        let success = true;
+        let errorSet = [];
+        let result = {};
+
+        let ads = await dao.getSet();
+        if (!ads) {
+            return{
+                success: false,
+                errorSet: ["CANNOT_GET_DATA"],
+            }; 
+        }
+        result = {
+            success: success,
+            errorSet: errorSet,
+            data:ads,
+        };
+        return result
+    },
+
+    getById: async function(req, res){
+        let success = true;
+        let errorSet = [];
+        let result = {};
+
+        let { _id } = req;
+        let ad = await dao.getById({ _id });
+        if(!ad){
+            return {
+                success:false,
+                errorSet:["AD_NOT_FOUND"],
+            };
+        }
+
+        result = {
+            status: 200,
+            success: success,
+            errorSet: errorSet,
+            data: ad,
+        };
+        return result;
+
+    },
+
+    create: async function(req) {
+        let success = true;
+        let errorSet = [];
+        let result = {};
+
+        let advert = await dao.create(req);
+        result = {
+            status:200,
+            success: success,
+            errorSet: errorSet,
+            data: advert,
+        };
+        return result;
+    },
+
     modify: async function(req) {
         let success = true;
         let errorSet = [];
