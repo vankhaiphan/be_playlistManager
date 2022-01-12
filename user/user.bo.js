@@ -4,38 +4,28 @@ const playlist_bo = require("../playlist/playlist.bo");
 
 module.exports = {
     getSet: async function(req) {
-        // let initialArr = [
-        //     { name: "eve", age: 12 },
-        //     { name: "john", age: 13 },
-        //     { name: "jane", age: 20 },
-        // ];
-
-        // let newArr1 = initialArr.map((v) => ({...v, isActive: true }));
-        // const newArr2 = initialArr.map((v) => Object.assign(v, { isActive: true }));
-        // console.log(newArr1);
-
         let success = true;
         let errorSet = [];
         let result = {};
 
         let users = await dao.getSet();
-        let UsersSet = [];
-        
-        for (let utilisateur of users) {
-            let _id = utilisateur._id;
-            let count = await playlist_bo.countByIdUser({ id_user: _id });
-            //utilisateur.nbPlaylists = count.data.count;
+        let userSet = [];
 
-            let User = utilisateur.toObject();
-            User.nbPlaylists = count.data.count ;
-            UsersSet.push(User);
+        for (let currentUser of users) {
+            let _id = currentUser._id;
+            let count = await playlist_bo.countByIdUser({ id_user: _id });
+            //currentUser.nbPlaylists = count.data.count;
+
+            let User = currentUser.toObject();
+            User.nbPlaylists = count.data.count;
+            userSet.push(User);
         }
 
         result = {
             status: 200,
             success: success,
             errorSet: errorSet,
-            data: UsersSet,
+            data: userSet,
         };
         return result;
     },

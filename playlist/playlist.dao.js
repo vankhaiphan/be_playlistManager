@@ -1,6 +1,5 @@
 const { db, connection, Schema, ObjectID, dbHelper } = require("../src/db");
 const collection_name = "playlist";
-
 const common = require("../common");
 const schema = new Schema({
     _id: String,
