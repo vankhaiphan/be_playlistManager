@@ -32,6 +32,7 @@ router.post("/createPlaylist", async function(req, res) {
 router.post("/modifyPlaylist", async function(req, res) {
     const request = {
         _id: req.body._id,
+        ...req.body,
     };
     const result = await bo.modify(request);
     res.send(result);
