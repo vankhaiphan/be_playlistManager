@@ -15,7 +15,7 @@ router.post("/getById", async function(req, res) {
     res.send(result);
 });
 
-router.post("/createAd", async function(req, res) {
+router.post("/createAdvert", async function(req, res) {
     const request = {
         id_user: req.body.id_user,
         fileName: req.body.fileName,
@@ -24,7 +24,7 @@ router.post("/createAd", async function(req, res) {
     res.send(result);
 });
 
-router.post("/modifyAd", async function(req, res) {
+router.post("/modifyAdvert", async function(req, res) {
     const request = {
         _id: req.body._id,
         ...req.body,
@@ -33,7 +33,7 @@ router.post("/modifyAd", async function(req, res) {
     res.send(result);
 });
 
-router.post("/delete", async function(req, res) {
+router.post("/deleteAdvert", async function(req, res) {
     const request = {
         _id: req.body._id,
     };

@@ -13,6 +13,6 @@ router.use("/playlist", playlistRoute);
 router.use("/video", videoRoute);
 router.use("/annoncesUpload", annonceUploadRoute);
 router.use("/history", historyRoute);
-router.use("/advertiser", advertiserRoute);
+router.use("/annonceur", advertiserRoute);
 
 module.exports = router;

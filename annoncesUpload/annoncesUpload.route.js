@@ -2,7 +2,7 @@ const express = require("express");
 const uploadFile = require("./upload");
 const router = express.Router();
 
-router.post("/uploadAd", async function(req, res) {
+router.post("/uploadAdvert", async function(req, res) {
     try {
         await uploadFile(req, res);
     
