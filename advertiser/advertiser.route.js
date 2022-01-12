@@ -17,7 +17,7 @@ router.post("/getById", async function(req, res) {
 
 router.post("/getByAnnonceur", async function(req, res) {
     const request = {
-        _idAdvertiser: req.body._id,
+        id_user: req.body.id_user,
     };
     const result = await bo.getByUserID(request);
     res.send(result);

@@ -50,7 +50,8 @@ module.exports = {
         let result = {};
 
         let { id_user } = req;
-        let ad = await dao.getByIdUser({ id_user });
+
+        let ad = await dao.getByUserID({ id_user });
         if (!ad) {
             return {
                 success: false,

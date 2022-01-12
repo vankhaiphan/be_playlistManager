@@ -10,8 +10,7 @@ const schema = new Schema({
 const model = db.model(collection_name, schema, `${collection_name}s`);
 
 module.exports = {
-
-    getSet: async function(req){
+    getSet: async function(req) {
         let query = model.find();
         let result = await query.exec();
         return result;
@@ -24,7 +23,7 @@ module.exports = {
         return result;
     },
 
-    getByIdUser: async function(req) {
+    getByUserID: async function(req) {
         let { id_user } = req;
         let query = model.find({ id_user });
         let result = await query.exec();
