@@ -4,9 +4,11 @@ const router = express.Router();
 const userRoute = require("../user/user.route");
 const playlistRoute = require("../playlist/playlist.route");
 const videoRoute = require("../video/video.route");
+const annonceUploadRoute = require("../annoncesUpload/annoncesUpload.route");
 
 router.use("/user", userRoute);
 router.use("/playlist", playlistRoute);
 router.use("/video", videoRoute);
+router.use("/annoncesUpload", annonceUploadRoute) ;
 
 module.exports = router;

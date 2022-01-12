@@ -36,6 +36,7 @@ app.use(
 );
 
 app.use("/", routes);
+app.use(express.static('./adverts'));
 
 app.listen(apiPort, () => {
     console.log(`Server is listening on port ${apiPort}`);

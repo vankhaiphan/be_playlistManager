@@ -140,3 +140,7 @@ dist
 *.code-workspace
 
 # End of https://www.toptal.com/developers/gitignore/api/node,vscode,linux
+
+# ignores other images in adverts folder
+adverts/*
+!adverts/_polytech.png
