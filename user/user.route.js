@@ -54,8 +54,9 @@ router.post("/modifyPassword", async function(req, res) {
     const request = {
         _id: req.body._id,
         password: req.body.password,
+        newPassword: req.body.newPassword,
     };
-    const result = await bo.modify(request);
+    const result = await bo.modifyPassword(request);
     res.send(result);
 });
 
