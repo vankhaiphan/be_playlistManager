@@ -10,10 +10,18 @@ const schema = new Schema({
 const model = db.model(collection_name, schema, `${collection_name}s`);
 
 module.exports = {
-    getById: async function(req) {},
+    getById: async function(req) {
+        let { _id } = req;
+        let query = model.findById(_id);
+        let result = await query.exec();
+        return result;
+    },
 
     getByIdUser: async function(req) {
-        //email user
+        let { id_user } = req;
+        let query = model.find({ id_user });
+        let result = await query.exec();
+        return result;
     },
 
     create: async function(req) {
