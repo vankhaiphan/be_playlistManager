@@ -48,9 +48,10 @@ module.exports = {
         let roleSubs = ROLE_STATUS.USER_ROLE;
 
         // Assign advertiser role if required
-        if (ads) {
+        if (ads === true) {
             roleSubs = ROLE_STATUS.ADVERTISER_ROLE;
         }
+        console.log(roleSubs);
         let document = new model({
             _id: _id,
             id_creator: roleSubs,

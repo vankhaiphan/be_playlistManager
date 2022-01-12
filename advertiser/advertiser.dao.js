@@ -76,6 +76,12 @@ module.exports = {
         return result;
     },
 
+    countByIdUser: async function(req) {
+        let query = model.countDocuments(req);
+        let result = await query.exec();
+        return result;
+    },
+
     getRandom: async function(req) {
         let query = model.findOne().skip(req);
         let result = await query.exec();
