@@ -8,30 +8,30 @@ module.exports = {
 
         let ads = await dao.getSet();
         if (!ads) {
-            return{
+            return {
                 success: false,
                 errorSet: ["CANNOT_GET_DATA"],
-            }; 
+            };
         }
         result = {
             success: success,
             errorSet: errorSet,
-            data:ads,
+            data: ads,
         };
-        return result
+        return result;
     },
 
-    getById: async function(req, res){
+    getById: async function(req, res) {
         let success = true;
         let errorSet = [];
         let result = {};
 
         let { _id } = req;
         let ad = await dao.getById({ _id });
-        if(!ad){
+        if (!ad) {
             return {
-                success:false,
-                errorSet:["AD_NOT_FOUND"],
+                success: false,
+                errorSet: ["AD_NOT_FOUND"],
             };
         }
 
@@ -42,7 +42,6 @@ module.exports = {
             data: ad,
         };
         return result;
-
     },
 
     create: async function(req) {
@@ -52,7 +51,7 @@ module.exports = {
 
         let advert = await dao.create(req);
         result = {
-            status:200,
+            status: 200,
             success: success,
             errorSet: errorSet,
             data: advert,
@@ -114,6 +113,30 @@ module.exports = {
     count: async function() {
         // Create count request
         const count = await dao.count();
+
+        return {
+            success: true,
+            errorSet: [],
+            data: {
+                count: count,
+            },
+        };
+    },
+
+    countByIdUser: async function(req) {
+        //Check input
+        if (!req.id_user) {
+            return {
+                success: false,
+                errorSet: ["INVALID_PARAMS"],
+            };
+        }
+
+        // Create count request
+        const request = {
+            id_user: req.id_user,
+        };
+        const count = await dao.countByIdUser(request);
 
         return {
             success: true,

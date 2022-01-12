@@ -1,6 +1,7 @@
 const dao = require("./user.dao");
 const bcrypt = require("bcrypt");
 const playlist_bo = require("../playlist/playlist.bo");
+const advertiser_bo = require("../advertiser/advertiser.bo");
 
 module.exports = {
     getSet: async function(req) {
@@ -13,11 +14,12 @@ module.exports = {
 
         for (let currentUser of users) {
             let _id = currentUser._id;
-            let count = await playlist_bo.countByIdUser({ id_user: _id });
-            //currentUser.nbPlaylists = count.data.count;
+            let countPlaylist = await playlist_bo.countByIdUser({ id_user: _id });
+            let countAds = await advertiser_bo.countByIdUser({ id_user: _id });
 
             let User = currentUser.toObject();
-            User.nbPlaylists = count.data.count;
+            User.nbPlaylists = countPlaylist.data.count;
+            User.nbAds = countAds.data.count;
             userSet.push(User);
         }
 
