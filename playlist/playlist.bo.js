@@ -6,7 +6,7 @@ module.exports = {
         let errorSet = [];
         let result = {};
 
-        let [_id] = req;
+        let {_id} = req;
         let playlist = await dao.getByUserId({ _id });
         if (!playlist) {
             return {
@@ -29,7 +29,7 @@ module.exports = {
         let errorSet = [];
         let result = {};
 
-        let [_id] = req;
+        let {_id} = req;
         let playlist = await dao.getById({ _id });
         if (!playlist) {
             return {
