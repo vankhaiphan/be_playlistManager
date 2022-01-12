@@ -1,7 +1,5 @@
 const { db, connection, Schema, ObjectID, dbHelper } = require("../src/db");
 const collection_name = "ad";
-
-const common = require("../common");
 const schema = new Schema({
     _id: String,
     id_user: String,
@@ -33,16 +31,39 @@ module.exports = {
     },
 
     modify: async function(req) {
+        let { find, upd } = req;
 
+        let mod = {
+            $set: {
+                ...upd.$set,
+            },
+        };
+
+        if (upd.$push) {
+            mod.$push = upd.$push;
+        }
+
+        const query = model.findOneAndUpdate(find, mod, { new: true });
+        const result = await query.exec();
+        return result;
     },
 
     delete: async function(req) {
+        let { _id } = req;
+        let query = model.findByIdAndRemove(_id);
+        let result = await query.exec();
+        return result;
+    },
 
+    count: async function(req) {
+        let query = model.countDocuments();
+        let result = await query.exec();
+        return result;
     },
 
     getRandom: async function(req) {
-
+        let query = model.findOne().skip(req);
+        let result = await query.exec();
+        return result;
     },
-
-
 };

@@ -14,3 +14,36 @@ router.post("/getById", async function(req, res) {
     const result = await bo.getById(request);
     res.send(result);
 });
+
+router.post("/createAd", async function(req, res) {
+    const request = {
+        id_user: req.body.id_user,
+        fileName: req.body.fileName,
+    };
+    const result = await bo.create(request);
+    res.send(result);
+});
+
+router.post("/modifyAd", async function(req, res) {
+    const request = {
+        _id: req.body._id,
+        ...req.body,
+    };
+    const result = await bo.modify(request);
+    res.send(result);
+});
+
+router.post("/delete", async function(req, res) {
+    const request = {
+        _id: req.body._id,
+    };
+    const result = await bo.delete(request);
+    res.send(result);
+});
+
+router.post("/getRandom", async function(req, res) {
+    const result = await bo.getRandom();
+    res.send(result);
+});
+
+module.exports = router;
