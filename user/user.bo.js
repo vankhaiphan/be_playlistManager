@@ -19,22 +19,23 @@ module.exports = {
         let result = {};
 
         let users = await dao.getSet();
-        let res = users.map((v) => Object.assign(v, { nbPlaylists: 0 }));
-
-        console.log(res);
-        // console.log(users);
-
-        for (let i = 0; i < users.length; i = i + 1) {
-            let _id = users[i]._id;
+        let UsersSet = [];
+        
+        for (let utilisateur of users) {
+            let _id = utilisateur._id;
             let count = await playlist_bo.countByIdUser({ id_user: _id });
-            users[i].nbPlaylist = count.data.count;
+            //utilisateur.nbPlaylists = count.data.count;
+
+            let User = utilisateur.toObject();
+            User.nbPlaylists = count.data.count ;
+            UsersSet.push(User);
         }
 
         result = {
             status: 200,
             success: success,
             errorSet: errorSet,
-            data: users,
+            data: UsersSet,
         };
         return result;
     },
