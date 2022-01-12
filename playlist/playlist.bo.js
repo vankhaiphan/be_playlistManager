@@ -6,8 +6,8 @@ module.exports = {
         let errorSet = [];
         let result = {};
 
-        let [_id] = req;
-        let playlist = await dao.getByUserId({ _id });
+        let { id_user } = req;
+        let playlist = await dao.getByUserId({ id_user });
         if (!playlist) {
             return {
                 success: false,

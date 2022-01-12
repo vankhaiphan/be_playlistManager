@@ -13,7 +13,8 @@ module.exports = {
         for (let i = 0; i < users.length; i = i + 1) {
             let _id = users[i]._id;
             let count = await playlist_bo.countByIdUser({ id_user: _id });
-            Object.assign(users[i], { nbPlaylist: count.data.count });
+            let countRes = count.data.count;
+            users[i].map((item) => item.nbPlaylist);
         }
 
         result = {
