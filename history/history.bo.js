@@ -8,7 +8,7 @@ module.exports = {
         let result = {};
 
         let ads = await dao.getAll();
-        if (!result) {
+        if (!ads) {
             return {
                 success: false,
                 errorSet: ["CANNOT_GET_DATA"],
