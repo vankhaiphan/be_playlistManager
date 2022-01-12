@@ -1,41 +1,37 @@
-const playlistDao = require("./playlist.dao");
-const dao = require("./playlist.dao");
+const dao = require("./advertiser.dao");
 
 module.exports = {
-    getByUserId: async function(req) {
+    getSet: async function(req) {
         let success = true;
         let errorSet = [];
         let result = {};
 
-        let { id_user } = req;
-        let playlist = await dao.getByUserId({ id_user });
-        if (!playlist) {
+        let ads = await dao.getSet();
+        if (!ads) {
             return {
                 success: false,
-                errorSet: ["PLAYLIST_NOT_FOUND"],
+                errorSet: ["CANNOT_GET_DATA"],
             };
         }
-
         result = {
-            status: 200,
             success: success,
             errorSet: errorSet,
-            data: playlist,
+            data: ads,
         };
         return result;
     },
 
-    getById: async function(req) {
+    getById: async function(req, res) {
         let success = true;
         let errorSet = [];
         let result = {};
 
         let { _id } = req;
-        let playlist = await dao.getById({ _id });
-        if (!playlist) {
+        let ad = await dao.getById({ _id });
+        if (!ad) {
             return {
                 success: false,
-                errorSet: ["PLAYLIST_NOT_FOUND"],
+                errorSet: ["AD_NOT_FOUND"],
             };
         }
 
@@ -43,7 +39,30 @@ module.exports = {
             status: 200,
             success: success,
             errorSet: errorSet,
-            data: playlist,
+            data: ad,
+        };
+        return result;
+    },
+
+    getByUserID: async function(req, res) {
+        let success = true;
+        let errorSet = [];
+        let result = {};
+
+        let { id_user } = req;
+        let ad = await dao.getByIdUser({ id_user });
+        if (!ad) {
+            return {
+                success: false,
+                errorSet: ["AD_NOT_FOUND"],
+            };
+        }
+
+        result = {
+            status: 200,
+            success: success,
+            errorSet: errorSet,
+            data: ad,
         };
         return result;
     },
@@ -53,12 +72,12 @@ module.exports = {
         let errorSet = [];
         let result = {};
 
-        let playlist = await dao.save(req);
+        let advert = await dao.create(req);
         result = {
             status: 200,
             success: success,
             errorSet: errorSet,
-            data: playlist,
+            data: advert,
         };
         return result;
     },
@@ -69,6 +88,7 @@ module.exports = {
         let result = {};
 
         let { _id, ...data } = req;
+
         let params = {
             find: {
                 _id: _id,
@@ -83,12 +103,12 @@ module.exports = {
             params.upd.$set = data;
         }
 
-        let user = await dao.modify(params);
+        let ad = await dao.modify(params);
 
         result = {
             success: success,
             errorSet: errorSet,
-            data: user,
+            data: ad,
         };
         return result;
     },
@@ -98,8 +118,8 @@ module.exports = {
         let errorSet = [];
         let result = {};
 
-        let user = await dao.delete(req);
-        if (!user) {
+        let ad = await dao.delete(req);
+        if (!ad) {
             return {
                 success: false,
                 errorSet: ["ID_NOT_FOUND"],
@@ -109,24 +129,21 @@ module.exports = {
             status: 200,
             success: success,
             errorSet: errorSet,
-            data: user,
+            data: ad,
         };
         return result;
     },
+    count: async function() {
+        // Create count request
+        const count = await dao.count();
 
-    getVideos: async function(req) {
-        let { _id } = req;
-        let success = true;
-        let errorSet = [];
-        let result = {};
-
-        let videos = await dao.getVideos({ _id });
-        result = {
-            success: success,
-            errorSet: errorSet,
-            data: videos,
+        return {
+            success: true,
+            errorSet: [],
+            data: {
+                count: count,
+            },
         };
-        return result;
     },
 
     countByIdUser: async function(req) {
@@ -153,29 +170,10 @@ module.exports = {
         };
     },
 
-    addVideo: async function(req) {
-        let { _id, id_video, thumbnail } = req;
-
-        let result = await dao.addVideo({ _id, id_video, thumbnail });
-        if (!result) {
-            return {
-                success: false,
-                errorSet: result.errorSet,
-            };
-        }
-        await this.updateThumbnail({ _id });
-        return result;
-    },
-
-    updateThumbnail: async function(req) {
-        let { _id } = req;
-        let result = await dao.updateThumbnail({ _id });
-        if (!result) {
-            return {
-                success: false,
-                errorSet: ["ERROR_UPDATE_THUMBNAIL"],
-            };
-        }
+    getRandom: async function() {
+        let totalRecord = await this.count();
+        let random = Math.floor(Math.random() * totalRecord);
+        let result = await dao.getRandom(random);
         return result;
     },
 };

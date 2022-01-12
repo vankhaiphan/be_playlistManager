@@ -6,15 +6,21 @@ const collection_name = "user";
 const schema = new Schema({
     _id: String,
     id_creator: String,
-    email: String,
+    email: { type: String, unique: true },
     password: String,
     date_add: Date,
     activated: Boolean,
 });
-// schema.plugin(dataTables);
+
 const model = db.model(collection_name, schema, `${collection_name}s`);
 
 module.exports = {
+    getSet: async function(req) {
+        let query = model.find();
+        let result = await query.exec();
+        return result;
+    },
+
     getById: async function(req) {
         let { _id } = req;
         let query = model.findById(_id);
@@ -30,6 +36,7 @@ module.exports = {
     },
 
     save: async function(req) {
+        await model.syncIndexes();
         let { email, password, ads } = req;
         let _id = dbHelper.generateIdTechnique();
 
@@ -41,9 +48,10 @@ module.exports = {
         let roleSubs = ROLE_STATUS.USER_ROLE;
 
         // Assign advertiser role if required
-        if (ads) {
+        if (ads === true) {
             roleSubs = ROLE_STATUS.ADVERTISER_ROLE;
         }
+        console.log(roleSubs);
         let document = new model({
             _id: _id,
             id_creator: roleSubs,
@@ -72,6 +80,44 @@ module.exports = {
 
         const query = model.findOneAndUpdate(find, mod, { new: true });
         const result = await query.exec();
+        return result;
+    },
+
+    modifyPassword: async function(req) {
+        let { _id, oldPassword, newPassword } = req;
+
+        let user = await this.getById({ _id });
+        let hash = user.password;
+
+        let decrypt = bcrypt.compareSync(oldPassword, hash);
+
+        if (!decrypt) {
+            return {
+                success: false,
+                errorSet: ["WRONG_PASSWORD"],
+            };
+        }
+
+        // Crypting the password
+        const salt = bcrypt.genSaltSync(saltRounds);
+        let password = bcrypt.hashSync(newPassword, salt);
+
+        let params = {
+            find: {
+                _id: _id,
+            },
+            upd: {
+                $set: { password: password },
+                $push: null,
+            },
+        };
+        let modifyPass = await this.modify(params);
+
+        let result = {
+            success: true,
+            data: modifyPass,
+        };
+
         return result;
     },
 

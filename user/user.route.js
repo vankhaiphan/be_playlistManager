@@ -2,6 +2,11 @@ const express = require("express");
 const router = express.Router();
 const bo = require("./user.bo");
 
+router.post("/getSet", async function(req, res) {
+    const result = await bo.getSet();
+    res.send(result);
+});
+
 router.post("/getById", async function(req, res) {
     const request = {
         _id: req.body._id,
@@ -45,6 +50,16 @@ router.post("/modifyAccount", async function(req, res) {
     res.send(result);
 });
 
+router.post("/modifyPassword", async function(req, res) {
+    const request = {
+        _id: req.body._id,
+        oldPassword: req.body.oldPassword,
+        newPassword: req.body.newPassword,
+    };
+    const result = await bo.modifyPassword(request);
+    res.send(result);
+});
+
 router.post("/deleteAccount", async function(req, res) {
     const request = {
         _id: req.body._id,
@@ -53,11 +68,16 @@ router.post("/deleteAccount", async function(req, res) {
     res.send(result);
 });
 
-// router.post("/changeRole", async function(req,res){
-//     const request = {
-//         _id: req.body._id,
+router.post("/changeRole", async function(req, res) {
+    const request = {
+        _id: req.body._id,
+    };
+    const result = await bo.changeRole(request);
+    res.send(result);
+});
 
-//     }
-// })
+//router.post("/", async function(req,res){
+
+//});
 
 module.exports = router;
