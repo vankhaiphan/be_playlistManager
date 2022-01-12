@@ -73,7 +73,7 @@ module.exports = {
         let document = new model({
             _id: _id,
             videoId: videoId,
-            url: videoUrl,
+            videoUrl: videoUrl,
             title: title,
             channelId: channelId,
             channelUrl: channelUrl,
