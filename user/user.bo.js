@@ -21,7 +21,7 @@ module.exports = {
         let users = await dao.getSet();
         let res = users.map((v) => Object.assign(v, { nbPlaylists: 0 }));
 
-        console.log(res);
+        // console.log(res);
         // console.log(users);
 
         for (let i = 0; i < users.length; i = i + 1) {
