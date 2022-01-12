@@ -86,14 +86,11 @@ module.exports = {
     },
 
     getVideos: async function(req) {
-        let { _id } = req;
         let videos = 0;
-        let query = model.find({ _id });
-        let result = await query.exec();
-        if (result.length != 0) {
-            videos = result.data.videos;
+        let playlist = await this.getById(req);
+        if (playlist.length != 0) {
+            videos = playlist[0].videos;
         }
-
         return videos;
     },
 

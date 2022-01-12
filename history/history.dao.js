@@ -43,4 +43,11 @@ module.exports = {
         let result = await document.save();
         return result;
     },
+
+    deleteByIdUser: async function(req) {
+        let { id_user } = req;
+        let query = model.deleteMany({ id_client });
+        let result = await query.exec();
+        return result;
+    },
 };

@@ -119,7 +119,7 @@ module.exports = {
         let errorSet = [];
         let result = {};
 
-        let videos = await dao.getVideos(_id);
+        let videos = await dao.getVideos({ _id });
         result = {
             success: success,
             errorSet: errorSet,

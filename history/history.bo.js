@@ -90,4 +90,27 @@ module.exports = {
         };
         return result;
     },
+
+    deleteByIdUser: async function(req) {
+        let success = true;
+        let errorSet = [];
+        let result = {};
+
+        let { id_user } = req;
+        let res = await dao.deleteByIdUser({ id_user });
+        if (!res) {
+            return {
+                success: false,
+                errorSet: ["ERROR_DELETE_DATA"],
+            };
+        }
+
+        result = {
+            status: 200,
+            success: success,
+            errorSet: errorSet,
+            data: res,
+        };
+        return result;
+    },
 };
