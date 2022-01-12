@@ -2,7 +2,15 @@ const { db, connection, Schema, ObjectID, dbHelper } = require("../src/db");
 const collection_name = "historie";
 const schema = new Schema({
     _id: String,
-    id_video: String,
+    videoId: String,
+    videoUrl: String,
+    title: String,
+    channelId: String,
+    channelUrl: String,
+    channelTitle: String,
+    description: String,
+    publishedAt: String,
+    thumbnail: String,
     id_user: String,
     date_add: Date,
 });
@@ -31,13 +39,32 @@ module.exports = {
     },
 
     create: async function(req) {
-        let { id_video, id_user } = req;
+        const {
+            id_user,
+            videoId,
+            videoUrl,
+            title,
+            channelId,
+            channelUrl,
+            channelTitle,
+            description,
+            publishedAt,
+            thumbnail,
+        } = req;
 
         let _id = dbHelper.generateIdTechnique();
         let document = new model({
             _id: _id,
+            videoId: videoId,
+            videoUrl: videoUrl,
+            title: title,
+            channelId: channelId,
+            channelUrl: channelUrl,
+            channelTitle: channelTitle,
+            description: description,
+            publishedAt: publishedAt,
+            thumbnail: thumbnail,
             id_user: id_user,
-            id_video: id_video,
             date_add: new Date(),
         });
         let result = await document.save();
@@ -46,7 +73,7 @@ module.exports = {
 
     deleteByIdUser: async function(req) {
         let { id_user } = req;
-        let query = model.deleteMany({ id_client });
+        let query = model.deleteMany({ id_user });
         let result = await query.exec();
         return result;
     },

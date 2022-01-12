@@ -73,8 +73,7 @@ module.exports = {
         let errorSet = [];
         let result = {};
 
-        let { id_video, id_user } = req;
-        let res = await dao.create({ id_video, id_user });
+        let res = await dao.create(req);
         if (!res) {
             return {
                 success: false,
@@ -96,8 +95,7 @@ module.exports = {
         let errorSet = [];
         let result = {};
 
-        let { id_user } = req;
-        let res = await dao.deleteByIdUser({ id_user });
+        let res = await dao.deleteByIdUser(req);
         if (!res) {
             return {
                 success: false,

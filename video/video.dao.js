@@ -13,6 +13,7 @@ const schema = new Schema({
     publishedAt: String,
     thumbnail: String,
     playlists: [String],
+    date_add: Date,
 });
 const model = db.model(collection_name, schema, `${collection_name}s`);
 
@@ -81,6 +82,7 @@ module.exports = {
             description: description,
             publishedAt: publishedAt,
             thumbnail: thumbnail,
+            date_add: new Date(),
             playlists: [],
         });
 

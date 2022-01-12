@@ -31,4 +31,18 @@ module.exports = {
         let result = await document.save();
         return result;
     },
+
+    modify: async function(req) {
+
+    },
+
+    delete: async function(req) {
+
+    },
+
+    getRandom: async function(req) {
+
+    },
+
+
 };
