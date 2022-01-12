@@ -1,4 +1,5 @@
 const dao = require("./video.dao");
+const playlistDao = require("../playlist/playlist.dao");
 
 module.exports = {
     getAllByPlaylistId: async function(req) {
@@ -38,17 +39,42 @@ module.exports = {
         return result;
     },
 
-    removeFromPlaylist: async function(req) {
+    removeVideoFromPlaylist: async function(req) {
         let success = true;
         let errorSet = [];
         let result = {};
 
-        let remove = await dao.removeFromPlaylist(req);
+        let { _id, id_playlist } = req;
+
+        let params = {
+            find: {
+                _id: _id,
+            },
+            upd: {
+                $pull: {
+                    playlists: id_playlist,
+                },
+            },
+        };
+
+        let paramsPlaylist = {
+            find: {
+                _id: id_playlist,
+            },
+            upd: {
+                $pull: {
+                    videos: { id_video: _id },
+                },
+            },
+        };
+
+        video = await dao.modify(params);
+        playlist = await playlistDao.modify(paramsPlaylist);
         result = {
-            status: 200,
             success: success,
             errorSet: errorSet,
-            data: remove,
+            data: video,
+            playlist,
         };
         return result;
     },

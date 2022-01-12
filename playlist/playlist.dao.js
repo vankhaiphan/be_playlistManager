@@ -62,7 +62,7 @@ module.exports = {
 
     modify: async function(req) {
         let { find, upd } = req;
-
+        console.log(upd);
         let mod = {
             $set: {
                 ...upd.$set,
@@ -71,6 +71,9 @@ module.exports = {
 
         if (upd.$push) {
             mod.$push = upd.$push;
+        }
+        if (upd.$pull) {
+            mod.$pull = upd.$pull;
         }
 
         const query = model.findOneAndUpdate(find, mod, { new: true });
