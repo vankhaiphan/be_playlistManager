@@ -18,6 +18,13 @@ const schema = new Schema({
 const model = db.model(collection_name, schema, `${collection_name}s`);
 
 module.exports = {
+    getByVideoId: async function(req, res) {
+        let { videoId } = req;
+        let query = model.find({ videoId });
+        let result = await query.exec();
+        return result;
+    },
+
     getAllByPlaylistId: async function(req) {
         let { id_playlist } = req;
         let query = model.find({ playlists: id_playlist });
@@ -34,7 +41,6 @@ module.exports = {
 
     addToPlaylist: async function(req) {
         let { _id, thumbnail, playlists } = req;
-
         let success = true;
         let errorSet = [];
         for (let i = 0; i < playlists.length; i = i + 1) {
@@ -87,13 +93,14 @@ module.exports = {
             date_add: new Date(),
             playlists: [],
         });
-        // let res = await document.save();
+
         let res = {};
         try {
             res = await document.save();
         } catch (exception) {
             if (exception.name === "MongoError" && exception.code === 11000) {
-                await this.addToPlaylist({ _id, thumbnail, playlists });
+                let resId = await this.getByVideoId({ videoId });
+                await this.addToPlaylist({ _id: resId[0]._id, thumbnail, playlists });
             } else {
                 return {
                     success: false,
