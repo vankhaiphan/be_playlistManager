@@ -44,6 +44,29 @@ module.exports = {
         return result;
     },
 
+    getByUserID: async function(req, res) {
+        let success = true;
+        let errorSet = [];
+        let result = {};
+
+        let { id_user } = req;
+        let ad = await dao.getByIdUser({ id_user });
+        if (!ad) {
+            return {
+                success: false,
+                errorSet: ["AD_NOT_FOUND"],
+            };
+        }
+
+        result = {
+            status: 200,
+            success: success,
+            errorSet: errorSet,
+            data: ad,
+        };
+        return result;
+    },
+
     create: async function(req) {
         let success = true;
         let errorSet = [];

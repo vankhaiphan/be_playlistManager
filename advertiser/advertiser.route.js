@@ -15,6 +15,14 @@ router.post("/getById", async function(req, res) {
     res.send(result);
 });
 
+router.post("/getByAnnonceur", async function(req, res) {
+    const request = {
+        _idAdvertiser: req.body._id,
+    };
+    const result = await bo.getByUserID(request);
+    res.send(result);
+});
+
 router.post("/createAdvert", async function(req, res) {
     const request = {
         id_user: req.body.id_user,
