@@ -6,7 +6,7 @@ const collection_name = "user";
 const schema = new Schema({
     _id: String,
     id_creator: String,
-    email: String,
+    email: { type: String, unique: true },
     password: String,
     date_add: Date,
     activated: Boolean,
@@ -36,6 +36,7 @@ module.exports = {
     },
 
     save: async function(req) {
+        await model.syncIndexes();
         let { email, password, ads } = req;
         let _id = dbHelper.generateIdTechnique();
 

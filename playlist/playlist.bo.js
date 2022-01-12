@@ -6,8 +6,8 @@ module.exports = {
         let errorSet = [];
         let result = {};
 
-        let {_id} = req;
-        let playlist = await dao.getByUserId({ _id });
+        let { id_user } = req;
+        let playlist = await dao.getByUserId({ id_user });
         if (!playlist) {
             return {
                 success: false,
@@ -147,5 +147,29 @@ module.exports = {
             };
         }
         return result;
+    },
+
+    countByIdUser: async function(req) {
+        //Check input
+        if (!req.id_user) {
+            return {
+                success: false,
+                errorSet: ["INVALID_PARAMS"],
+            };
+        }
+
+        // Create count request
+        const request = {
+            id_user: req.id_user,
+        };
+        const count = await dao.countByIdUser(request);
+
+        return {
+            success: true,
+            errorSet: [],
+            data: {
+                count: count,
+            },
+        };
     },
 };

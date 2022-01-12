@@ -8,51 +8,15 @@ module.exports = {
         let errorSet = [];
         let result = {};
 
-        let userSet = [];
-
-        //Params in request
-        let { nbByPage, start, orderBy, orderASC } = req.body;
-        // Treat params
-        // Setup default pagination params
-        if (!start) start = 0;
-        if (!nbByPage) nbByPage = 20;
-
-        // Treat sort params
-        // By default sort by last created date
-        let _orderASC = orderASC ? "1" : "-1";
-        let _orderBy = orderBy || "date_add";
-        let sort = {};
-        sort[_orderBy] = _orderASC;
-
-        // Treat find params
-        // user get only their project
-        let find = {};
-        if (id_user) {
-            find["id_user"] = id_user;
-        }
-
-        // if search params is specify, filter project by title
-        let search_obj;
-
-        if (typeof search !== "undefined") {
-            search_obj = {
-                value: search,
-                fields: ["title"],
-            };
-        }
-
-        // Params for dao
-        let params = {
-            search,
-            start,
-            nbByPage,
-            sort: sort,
-            find: find,
-        };
-        let table = await dao.getSet(params);
-
         let users = await dao.getSet();
-        let playlist = await playlist_bo.getByUserId();
+
+        for (let i = 0; i < users.length; i = i + 1) {
+            let _id = users[i]._id;
+            let count = await playlist_bo.countByIdUser({ id_user: _id });
+            let countRes = count.data.count;
+            users[i].map((item) => item.nbPlaylist);
+        }
+
         result = {
             status: 200,
             success: success,
@@ -111,6 +75,7 @@ module.exports = {
         let success = true;
         let errorSet = [];
         let result = {};
+        let { email } = req.email;
 
         let user = await dao.save(req);
         result = {
