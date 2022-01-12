@@ -21,7 +21,7 @@ router.post("/saveVideo", async function(req, res) {
         channelTitle: req.body.channelTitle,
         description: req.body.description,
         publishedAt: req.body.publishedAt,
-        thumbnails: req.body.thumbnails,
+        thumbnail: req.body.thumbnail,
         playlists: req.body.playlists,
     };
     const result = await bo.save(request);

@@ -1,6 +1,6 @@
 const { db, connection, Schema, ObjectID, dbHelper } = require("../src/db");
 const collection_name = "playlist";
-const videoDao = require("../video/video.dao");
+
 const common = require("../common");
 const schema = new Schema({
     _id: String,
@@ -11,7 +11,7 @@ const schema = new Schema({
     id_user: String,
     thumbnail: String,
     date_add: Date,
-    videos: [String],
+    videos: [{ id_video: String, thumbnail: String }],
 });
 // schema.plugin(dataTables);
 const model = db.model(collection_name, schema, `${collection_name}s`);
@@ -88,35 +88,50 @@ module.exports = {
 
     getVideos: async function(req) {
         let { _id } = req;
+        let videos = 0;
         let query = model.find({ _id });
         let result = await query.exec();
-        let videos = result.data.videos;
+        if (result.length != 0) {
+            videos = result.data.videos;
+        }
+
         return videos;
     },
 
     addVideo: async function(req) {
-        let { _id, video } = req;
-        let query = model.findOneAndUpdate({ _id: _id }, { $push: { videos: video } });
+        let { _id, id_video, thumbnail } = req;
+        let prepare = {
+            id_video: id_video,
+            thumbnail: thumbnail,
+        };
+
+        let query = model.findOneAndUpdate({ _id: _id }, { $push: { videos: prepare } });
         let result = await query.exec();
-        return result;
-    },
-
-    updateThumbnail: async function(req) {
-        let { _id } = req;
-
-        let playlist = await this.getById({ _id });
-        let video = playlist.data.videos[0];
-
-        let currentVideo = await videoDao.getById({ _id: video });
-        let thumbnail = currentVideo.data.thumbnail;
-
-        let result = await this.modify({ _id, thumbnail });
         return result;
     },
 
     countByIdUser: async function(req) {
         let query = model.countDocuments(req);
         let result = await query.exec();
+        return result;
+    },
+
+    updateThumbnail: async function(req) {
+        let success = true;
+        let errorSet = [];
+        let result = {};
+        let { _id } = req;
+
+        let playlist = await this.getById({ _id });
+
+        if (playlist[0].videos.length != 0) {
+            const query = model.findOneAndUpdate({ _id: _id }, { thumbnail: playlist[0].videos[0].thumbnail });
+            const res = await query.exec();
+        }
+        result = {
+            success: success,
+            errorSet: errorSet,
+        };
         return result;
     },
 };

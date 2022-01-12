@@ -29,7 +29,7 @@ module.exports = {
         let errorSet = [];
         let result = {};
 
-        let [_id] = req;
+        let { _id } = req;
         let playlist = await dao.getById({ _id });
         if (!playlist) {
             return {
@@ -115,37 +115,16 @@ module.exports = {
 
     getVideos: async function(req) {
         let { _id } = req;
-        let result = await dao.getVideos(_id);
-        if (!result) {
-            return {
-                success: false,
-                errorSet: result.errorSet,
-            };
-        }
-        return result;
-    },
+        let success = true;
+        let errorSet = [];
+        let result = {};
 
-    addVideo: async function(req) {
-        let { _id, video } = req;
-        let result = await dao.addVideo({ _id, video });
-        if (!result) {
-            return {
-                success: false,
-                errorSet: result.errorSet,
-            };
-        }
-        return result;
-    },
-
-    updateThumbnail: async function(req) {
-        let { _id } = req;
-        let result = dao.updateThumbnail({ _id });
-        if (!result) {
-            return {
-                success: false,
-                errorSet: ["ERROR_UPDATE_THUMBNAIL"],
-            };
-        }
+        let videos = await dao.getVideos(_id);
+        result = {
+            success: success,
+            errorSet: errorSet,
+            data: videos,
+        };
         return result;
     },
 
@@ -171,5 +150,31 @@ module.exports = {
                 count: count,
             },
         };
+    },
+
+    addVideo: async function(req) {
+        let { _id, id_video, thumbnail } = req;
+
+        let result = await dao.addVideo({ _id, id_video, thumbnail });
+        if (!result) {
+            return {
+                success: false,
+                errorSet: result.errorSet,
+            };
+        }
+        await this.updateThumbnail({ _id });
+        return result;
+    },
+
+    updateThumbnail: async function(req) {
+        let { _id } = req;
+        let result = await dao.updateThumbnail({ _id });
+        if (!result) {
+            return {
+                success: false,
+                errorSet: ["ERROR_UPDATE_THUMBNAIL"],
+            };
+        }
+        return result;
     },
 };

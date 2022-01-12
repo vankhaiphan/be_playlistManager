@@ -14,7 +14,7 @@ router.post("/getById", async function(req, res) {
     const request = {
         _id: req.body._id,
     };
-    const result = await bo.getByd(request);
+    const result = await bo.getById(request);
     res.send(result);
 });
 
@@ -50,6 +50,16 @@ router.post("/getVideos", async function(req, res) {
         _id: req.body._id,
     };
     const result = await bo.getVideos(request);
+    res.send(result);
+});
+
+router.post("/addVideo", async function(req, res) {
+    const request = {
+        _id: req.body._id,
+        video: req.body.video,
+        thumbnail: req.body.thumbnail,
+    };
+    const result = await bo.addVideo(request);
     res.send(result);
 });
 

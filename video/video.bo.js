@@ -1,5 +1,4 @@
 const dao = require("./video.dao");
-const playlist_bo = require("../playlist/playlist.bo");
 
 module.exports = {
     getAllByPlaylistId: async function(req) {

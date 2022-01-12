@@ -1,8 +1,9 @@
 const { db, connection, Schema, ObjectID, dbHelper } = require("../src/db");
 const collection_name = "video";
-const playlist_bo = require("../playlist/playlist.bo");
+const playlistBo = require("../playlist/playlist.bo");
 const schema = new Schema({
     _id: String,
+    videoId: { type: String, unique: true },
     videoUrl: String,
     title: String,
     channelId: String,
@@ -10,7 +11,7 @@ const schema = new Schema({
     channelTitle: String,
     description: String,
     publishedAt: String,
-    thumbnails: String,
+    thumbnail: String,
     playlists: [String],
 });
 const model = db.model(collection_name, schema, `${collection_name}s`);
@@ -31,13 +32,12 @@ module.exports = {
     },
 
     addToPlaylist: async function(req) {
-        let { _id, playlists } = req;
+        let { _id, thumbnail, playlists } = req;
+
         let success = true;
         let errorSet = [];
-
         for (let i = 0; i < playlists.length; i = i + 1) {
             let query = model.findOneAndUpdate({ _id: _id }, { $push: { playlists: playlists[i] } });
-
             let result = await query.exec();
             if (!result) {
                 return {
@@ -45,9 +45,8 @@ module.exports = {
                     errorSet: ["CANNOT_UPDATE"],
                 };
             }
-            await playlist_bo.updateThumbnail({ _id: playlists[i] });
+            await playlistBo.addVideo({ _id: playlists[i], id_video: _id, thumbnail });
         }
-
         result = {
             success: success,
             errorSet: errorSet,
@@ -68,12 +67,12 @@ module.exports = {
         let success = true;
         let errorSet = [];
         let result = {};
-        // console.log("id", req);
         let _id = dbHelper.generateIdTechnique();
         const playlists = req.playlists;
-        const { videoUrl, title, channelId, channelUrl, channelTitle, description, publishedAt, thumbnails } = req;
+        const { videoId, videoUrl, title, channelId, channelUrl, channelTitle, description, publishedAt, thumbnail } = req;
         let document = new model({
             _id: _id,
+            videoId: videoId,
             url: videoUrl,
             title: title,
             channelId: channelId,
@@ -81,7 +80,7 @@ module.exports = {
             channelTitle: channelTitle,
             description: description,
             publishedAt: publishedAt,
-            thumbnails: thumbnails,
+            thumbnail: thumbnail,
             playlists: [],
         });
 
@@ -93,16 +92,12 @@ module.exports = {
             };
         }
 
-        let add = await this.addToPlaylist({ _id, playlists });
-        if (!add) {
-            return {
-                success: false,
-                errorSet: ["ADD_TO_PLAYLIST_FAILED"],
-            };
-        }
+        await this.addToPlaylist({ _id, thumbnail, playlists });
+
         result = {
             success: success,
             errorSet: errorSet,
+            data: res,
         };
         return result;
     },
