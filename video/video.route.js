@@ -14,6 +14,7 @@ router.post("/getAllByPlaylistId", async function(req, res) {
 
 router.post("/saveVideo", async function(req, res) {
     const request = {
+        videoId: req.body.videoId,
         videoUrl: req.body.videoUrl,
         title: req.body.title,
         channelId: req.body.channelId,
