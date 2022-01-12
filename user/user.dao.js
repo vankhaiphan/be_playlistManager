@@ -83,12 +83,13 @@ module.exports = {
     },
 
     modifyPassword: async function(req) {
-        let { _id, password, newPassword } = req;
+        let { _id, oldPassword, newPassword } = req;
 
         let user = await this.getById({ _id });
         let hash = user.password;
-        let decrypt = bcrypt.compareSync(password, hash);
-        console.log("decrypt", decrypt);
+
+        let decrypt = bcrypt.compareSync(oldPassword, hash);
+
         if (!decrypt) {
             return {
                 success: false,
@@ -98,9 +99,18 @@ module.exports = {
 
         // Crypting the password
         const salt = bcrypt.genSaltSync(saltRounds);
-        let hashed = bcrypt.hashSync(newPassword, salt);
-        console.log("hashed", hashed);
-        let modifyPass = await this.modify({ _id, password: hashed });
+        let password = bcrypt.hashSync(newPassword, salt);
+
+        let params = {
+            find: {
+                _id: _id,
+            },
+            upd: {
+                $set: { password: password },
+                $push: null,
+            },
+        };
+        let modifyPass = await this.modify(params);
 
         let result = {
             success: true,

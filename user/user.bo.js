@@ -107,7 +107,7 @@ module.exports = {
         let result = {};
 
         let { _id, ...data } = req;
-        console.log(req);
+
         let params = {
             find: {
                 _id: _id,
