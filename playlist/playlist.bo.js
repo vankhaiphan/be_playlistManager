@@ -1,3 +1,4 @@
+const playlistDao = require("./playlist.dao");
 const dao = require("./playlist.dao");
 
 module.exports = {

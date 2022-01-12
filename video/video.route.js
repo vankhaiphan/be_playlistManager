@@ -37,6 +37,14 @@ router.post("/modifyVideo", async function(req, res) {
     res.send(result);
 });
 
+router.post("/removeVideoFromPlaylist", async function(req, res) {
+    const request = {
+        _id: req.body._id,
+        id_playlist: req.body.id_playlist,
+    };
+    const result = await bo.removeVideoFromPlaylist(request);
+    res.send(result);
+});
 // router.post("/deleteVideo", async function(req, res) {
 //     const request = {
 //         _id: req.body._id,

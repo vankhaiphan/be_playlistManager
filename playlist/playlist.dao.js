@@ -72,6 +72,9 @@ module.exports = {
         if (upd.$push) {
             mod.$push = upd.$push;
         }
+        if (upd.$pull) {
+            mod.$pull = upd.$pull;
+        }
 
         const query = model.findOneAndUpdate(find, mod, { new: true });
         const result = await query.exec();

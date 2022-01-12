@@ -70,7 +70,9 @@ module.exports = {
         let result = {};
         let _id = dbHelper.generateIdTechnique();
         const playlists = req.playlists;
+
         const { videoId, videoUrl, title, channelId, channelUrl, channelTitle, description, publishedAt, thumbnail } = req;
+
         let document = new model({
             _id: _id,
             videoId: videoId,
@@ -85,13 +87,19 @@ module.exports = {
             date_add: new Date(),
             playlists: [],
         });
-
-        let res = await document.save();
-        if (!res) {
-            return {
-                success: false,
-                errorSet: ["VIDEO_SAVE_FAILED"],
-            };
+        // let res = await document.save();
+        let res = {};
+        try {
+            res = await document.save();
+        } catch (exception) {
+            if (exception.name === "MongoError" && exception.code === 11000) {
+                await this.addToPlaylist({ _id, thumbnail, playlists });
+            } else {
+                return {
+                    success: false,
+                    errorSet: ["VIDEO_SAVE_FAILED"],
+                };
+            }
         }
 
         await this.addToPlaylist({ _id, thumbnail, playlists });
@@ -116,7 +124,9 @@ module.exports = {
         if (upd.$push) {
             mod.$push = upd.$push;
         }
-
+        if (upd.$pull) {
+            mod.$pull = upd.$pull;
+        }
         const query = model.findOneAndUpdate(find, mod, { new: true });
         const result = await query.exec();
         return result;
