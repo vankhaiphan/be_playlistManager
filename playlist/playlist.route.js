@@ -10,6 +10,14 @@ router.post("/getByUserId", async function(req, res) {
     res.send(result);
 });
 
+router.post("/getById", async function(req, res) {
+    const request = {
+        _id: req.body._id,
+    };
+    const result = await bo.getById(request);
+    res.send(result);
+});
+
 router.post("/createPlaylist", async function(req, res) {
     const request = {
         name: req.body.name,
@@ -34,6 +42,22 @@ router.post("/deletePlaylist", async function(req, res) {
         _id: req.body._id,
     };
     const result = await bo.delete(request);
+    res.send(result);
+});
+
+router.post("/getVideos", async function(req, res) {
+    const request = {
+        _id: req.body._id,
+    };
+    const result = await bo.getVideos(request);
+    res.send(result);
+});
+
+router.post("/updateThumbnail", async function(req, res) {
+    const request = {
+        _id: req.body._id,
+    };
+    const result = await bo.updateThumbnail(request);
     res.send(result);
 });
 

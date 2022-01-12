@@ -1,13 +1,22 @@
 const dao = require("./user.dao");
 const bcrypt = require("bcrypt");
+const playlist_bo = require("../playlist/playlist.bo");
 
 module.exports = {
-    getAll: async function(req) {
+    getSet: async function(req) {
         let success = true;
         let errorSet = [];
         let result = {};
 
-        let users = await dao.getAll();
+        let users = await dao.getSet();
+
+        for (let i = 0; i < users.length; i = i + 1) {
+            let _id = users[i]._id;
+            let count = await playlist_bo.countByIdUser({ id_user: _id });
+            let countRes = count.data.count;
+            users[i].map((item) => item.nbPlaylist);
+        }
+
         result = {
             status: 200,
             success: success,
@@ -66,6 +75,7 @@ module.exports = {
         let success = true;
         let errorSet = [];
         let result = {};
+        let { email } = req.email;
 
         let user = await dao.save(req);
         result = {
@@ -128,7 +138,6 @@ module.exports = {
         return result;
     },
 
-    // renvoie id_creator
     authenticate: async function(req, res) {
         const { email, password } = req;
 

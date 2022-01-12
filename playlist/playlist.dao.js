@@ -1,6 +1,6 @@
 const { db, connection, Schema, ObjectID, dbHelper } = require("../src/db");
 const collection_name = "playlist";
-const videoDao = require("../video/video.bo");
+const videoDao = require("../video/video.dao");
 const common = require("../common");
 const schema = new Schema({
     _id: String,
@@ -8,9 +8,10 @@ const schema = new Schema({
     name: String,
     description: String,
     status: String,
-    user_id: String,
+    id_user: String,
     thumbnail: String,
     date_add: Date,
+    videos: [String],
 });
 // schema.plugin(dataTables);
 const model = db.model(collection_name, schema, `${collection_name}s`);
@@ -19,6 +20,13 @@ module.exports = {
     getByUserId: async function(req) {
         let { id_user } = req;
         let query = model.find({ id_user });
+        let result = await query.exec();
+        return result;
+    },
+
+    getById: async function(req) {
+        let { _id } = req;
+        let query = model.find({ _id });
         let result = await query.exec();
         return result;
     },
@@ -47,6 +55,7 @@ module.exports = {
             status: status,
             id_user: id_user,
             date_add: new Date(),
+            videos: [],
         });
         let result = await document.save();
         return result;
@@ -78,14 +87,36 @@ module.exports = {
     },
 
     getVideos: async function(req) {
-        let { id_playlist } = req;
-        let result = await videoDao.getByPlaylistId();
-        if (!result) {
-            return {
-                success: false,
-                errorSet: result.errorSet,
-            };
-        }
+        let { _id } = req;
+        let query = model.find({ _id });
+        let result = await query.exec();
+        let videos = result.data.videos;
+        return videos;
+    },
+
+    addVideo: async function(req) {
+        let { _id, video } = req;
+        let query = model.findOneAndUpdate({ _id: _id }, { $push: { videos: video } });
+        let result = await query.exec();
+        return result;
+    },
+
+    updateThumbnail: async function(req) {
+        let { _id } = req;
+
+        let playlist = await this.getById({ _id });
+        let video = playlist.data.videos[0];
+
+        let currentVideo = await videoDao.getById({ _id: video });
+        let thumbnail = currentVideo.data.thumbnail;
+
+        let result = await this.modify({ _id, thumbnail });
+        return result;
+    },
+
+    countByIdUser: async function(req) {
+        let query = model.countDocuments(req);
+        let result = await query.exec();
         return result;
     },
 };
